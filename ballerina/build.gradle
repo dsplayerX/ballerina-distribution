@@ -1116,7 +1116,7 @@ def buildStandardLibs = { distPath, stdlibTest, isStageTest, testMinorVersionDif
         exitVal = exec {
             ignoreExitValue true
             workingDir "${distPath}/${stdlibTest}"
-            commandLine 'cmd', '/c', "${distPath}/bin/bal.bat build ${additionalBuildParams}"
+            commandLine 'cmd', '/c', "${distPath}/bin/bal.bat test ${additionalBuildParams}"
         }
     } else {
         if (!isStageTest) {
@@ -1140,7 +1140,7 @@ def buildStandardLibs = { distPath, stdlibTest, isStageTest, testMinorVersionDif
             environment "BALLERINA_STAGE_CENTRAL", "$isStageTest"
             ignoreExitValue true
             workingDir "${distPath}/${stdlibTest}"
-            commandLine 'sh', '-c', "${distPath}/bin/bal build ${additionalBuildParams}"
+            commandLine 'sh', '-c', "${distPath}/bin/bal test ${additionalBuildParams}"
         }
     }
     if (exitVal.getExitValue() == 1) {
