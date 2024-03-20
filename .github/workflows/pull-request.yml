@@ -77,3 +77,26 @@ jobs:
                   githubAccessToken: ${{ secrets.GITHUB_TOKEN }}
                   ballerinaBotWorkflow: $ {{ secrets.BALLERINA_BOT_WORKFLOW }}
               run: ./gradlew.bat clean build --stacktrace --scan --console=plain --no-daemon --continue -x test
+    windows-integration-tests:
+        name:  Integration Tests on Windows
+        runs-on: windows-latest
+        concurrency:
+            group: ${{ github.ref }}-windows
+            cancel-in-progress: true
+        steps:
+            -   name: Checkout Repository
+                uses: actions/checkout@v3
+            -   name: Set up JDK 17
+                uses: actions/setup-java@v3
+                with:
+                    distribution: 'temurin'
+                    java-version: '17.0.7'
+            - name: Build Ballerina Distribution
+              env:
+                  packageUser: ${{ github.actor }}
+                  packagePAT: ${{ secrets.GITHUB_TOKEN }}
+                  JAVA_TOOL_OPTIONS: -Dfile.encoding=UTF8
+                  devCentralToken: ${{ secrets.BALLERINA_CENTRAL_DEV_ACCESS_TOKEN }}
+                  githubAccessToken: ${{ secrets.GITHUB_TOKEN }}
+                  ballerinaBotWorkflow: $ {{ secrets.BALLERINA_BOT_WORKFLOW }}
+              run: ./gradlew.bat clean build --stacktrace --scan --console=plain --no-daemon --continue -x :ballerina:testExamples -x :project-api-tests:test
